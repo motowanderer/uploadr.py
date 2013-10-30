@@ -53,16 +53,18 @@ import xmltramp
 #
 # Location to scan for new images
 #
+#
 IMAGE_DIR = "images/"
 #
 #   Flickr settings
 #
 FLICKR = {"title": "",
         "description": "",
-        "tags": "auto-upload",
-        "is_public": "1",
-        "is_friend": "0",
-        "is_family": "0" }
+        "tags": "auto-upload", # hack this as necessary
+        "is_public": "0", # default invisible
+        "is_friend": "0", # default invisible
+        "is_family": "0", # default invisible
+        "hidden": "2" } # this defaults to hidden
 #
 #   How often to check for new images to upload (in seconds)
 #
@@ -326,7 +328,11 @@ class Uploadr:
             (dirpath, dirnames, filenames) = data
             for f in filenames :
                 ext = f.lower().split(".")[-1]
+				# first do the pictures
                 if ( ext == "jpg" or ext == "gif" or ext == "png" ):
+                    images.append( os.path.normpath( dirpath + "/" + f ) )
+				# second check for movies
+                if ( ext == "avi" or ext == "mov" or ext == "mpg" or ext == "mp4" ):
                     images.append( os.path.normpath( dirpath + "/" + f ) )
         images.sort()
         return images
